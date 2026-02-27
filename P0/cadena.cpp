@@ -1,6 +1,8 @@
 #include "./cadena.hpp"
 
-Cadena::Cadena(size_t tam, char relleno) : tam_{tam}, s_{ new char[tam] }
+char Cadena::vacia{'\0'};
+
+Cadena::Cadena(size_t tam, char relleno) : tam_{tam}, s_{ tam_ > 0 ? new char[tam_ + 1] : &vacia }
 {
     if(tam > 0 && relleno == vacia) {   //En caso de pasar un único parametro cambiamos caracter a rellenar por ' '
         relleno = ' ';

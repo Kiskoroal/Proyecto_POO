@@ -9,7 +9,7 @@ class Cadena
         inline size_t length() const { return tam_; }
         explicit Cadena(size_t  tam = 0, char relleno = vacia);
     private:
-        static const char vacia = '\0';
+        static char vacia;
         size_t tam_;
         char* s_;
 };
