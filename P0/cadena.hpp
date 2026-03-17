@@ -2,16 +2,86 @@
 #define __CADENA__HPP
 
 #include <cstddef>
+<<<<<<< HEAD
+=======
+#include <cstring>
+#include <stdexcept>
+>>>>>>> desarrollo
 
 class Cadena 
 {
     public: 
+<<<<<<< HEAD
         inline size_t length() const { return tam_; }
         explicit Cadena(size_t  tam = 0, char relleno = vacia);
+=======
+        //Constructores
+
+        explicit Cadena(size_t  tam = 0, char relleno = vacia);
+        
+        //Constructor a partir de cadena de bajo nivel
+        Cadena(const char* cadenaCopia);
+
+        //Constructor de copia
+       Cadena(const Cadena& A);
+        
+        //Observadoras
+        inline size_t length() const { return tam_; }
+
+        //Métodos propios
+        inline const char& at(size_t indice) const 
+        {  
+            if(indice >= 0 && indice < tam_) 
+            {
+                return s_[indice];
+            }
+            else 
+            {
+                throw std::out_of_range("Fuera de rango. Rango válido [0, length() - 1]");                
+            }
+        }
+
+        inline char& at(size_t indice) 
+        {  
+            if(indice >= 0 && indice < tam_) 
+            {
+                return s_[indice];
+            }
+            else 
+            {
+                throw std::out_of_range("Fuera de rango. Rango válido [0, length() - 1]");                
+            }
+        }
+
+        Cadena substr(size_t indice, size_t desplazamiento) const;
+
+        //Operadores sobrecargados []
+        inline const char& operator [](size_t indice) const { return s_[indice]; }
+        inline char& operator [](size_t indice) { return s_[indice]; }
+        Cadena& operator =(const Cadena& A);
+        explicit inline operator const char*() const { return s_; }
+        Cadena& operator +=(const Cadena& A);
+        Cadena& operator =(const char* a);
+
+
+        ~Cadena();
+>>>>>>> desarrollo
     private:
         static char vacia;
         size_t tam_;
         char* s_;
 };
 
+<<<<<<< HEAD
+=======
+bool operator ==(const Cadena& A, const Cadena& B);
+bool operator !=(const Cadena& A, const Cadena& B);
+bool operator <(const Cadena& A, const Cadena& B);
+bool operator >(const Cadena& A, const Cadena& B);
+bool operator <=(const Cadena& A, const Cadena& B); 
+bool operator >=(const Cadena& A, const Cadena& B);
+
+Cadena operator +(const Cadena& A, const Cadena& B);
+
+>>>>>>> desarrollo
 #endif //__CADENA__HPP
