@@ -1,10 +1,4 @@
 #include "./cadena.hpp"
-<<<<<<< HEAD
-
-char Cadena::vacia{'\0'};
-
-Cadena::Cadena(size_t tam, char relleno) : tam_{tam}, s_{ tam_ > 0 ? new char[tam_ + 1] : &vacia }
-=======
 #include <stdexcept>
 #include <utility>
 
@@ -13,7 +7,6 @@ char Cadena::vacia{'\0'};
 //Constructores
 
 Cadena::Cadena(size_t tam, char relleno) : tam_{tam}, s_{tam_ > 0 ? new char[tam_ + 1] : &vacia}
->>>>>>> desarrollo
 {
     if(tam > 0 && relleno == vacia) {   //En caso de pasar un único parametro cambiamos caracter a rellenar por ' '
         relleno = ' ';
@@ -23,8 +16,6 @@ Cadena::Cadena(size_t tam, char relleno) : tam_{tam}, s_{tam_ > 0 ? new char[tam
     {
         s_[i] = relleno;
     }
-<<<<<<< HEAD
-=======
 
     if(tam > 0) 
         s_[tam] = vacia; //Añadimos caracter terminador '\0'
@@ -161,5 +152,4 @@ bool operator <=(const Cadena& A, const Cadena& B)
 bool operator >=(const Cadena& A, const Cadena& B) 
 { 
     return !(A < B); 
->>>>>>> desarrollo
 }

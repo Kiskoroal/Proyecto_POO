@@ -2,19 +2,12 @@
 #define __CADENA__HPP
 
 #include <cstddef>
-<<<<<<< HEAD
-=======
 #include <cstring>
 #include <stdexcept>
->>>>>>> desarrollo
 
 class Cadena 
 {
     public: 
-<<<<<<< HEAD
-        inline size_t length() const { return tam_; }
-        explicit Cadena(size_t  tam = 0, char relleno = vacia);
-=======
         //Constructores
 
         explicit Cadena(size_t  tam = 0, char relleno = vacia);
@@ -65,15 +58,12 @@ class Cadena
 
 
         ~Cadena();
->>>>>>> desarrollo
     private:
         static char vacia;
         size_t tam_;
         char* s_;
 };
 
-<<<<<<< HEAD
-=======
 bool operator ==(const Cadena& A, const Cadena& B);
 bool operator !=(const Cadena& A, const Cadena& B);
 bool operator <(const Cadena& A, const Cadena& B);
@@ -83,5 +73,4 @@ bool operator >=(const Cadena& A, const Cadena& B);
 
 Cadena operator +(const Cadena& A, const Cadena& B);
 
->>>>>>> desarrollo
 #endif //__CADENA__HPP
