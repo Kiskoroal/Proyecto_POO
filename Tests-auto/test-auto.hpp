@@ -12,6 +12,8 @@
 #ifndef TEST_AUTO_HPP_
 #define TEST_AUTO_HPP_
 
+#define P0
+
 #if !defined(P0) && !defined(P1) && !defined(P2) && !defined(P3) && !defined(P4)
 #error Debe definir Px siendo x | 0 <= x <= 4 el n.º de la práctica a probar
 #endif

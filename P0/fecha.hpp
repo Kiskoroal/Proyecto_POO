@@ -8,10 +8,7 @@ class Fecha
         //Fecha dada dd/mm/AA 
         explicit Fecha(int d = 0, int m = 0, int a = 0);
         
-        //Constructor de copia fecha
-        Fecha(const Fecha& A);
-        
-        //Constructor de conversion a partir de cadena de bajo nivel (dd/mm/aa)
+        //Crear fecha a partir de cadena de bajo nivel
         Fecha(const char* fecha);
 
         //Funciones observadoras
@@ -25,7 +22,13 @@ class Fecha
         static const int AñoMinimo = 1902, AñoMaximo = 2037;
         
         //Sobrecarga de operadores
-        Fecha& operator =(const Fecha& A);
+        Fecha& operator ++(); //Preincremento
+        Fecha operator ++(int i); //Pos-incremento
+        Fecha& operator --(); //Predecremento
+        Fecha operator --(int i); //Posdecremento
+        Fecha& operator +=(int i);
+        Fecha& operator -=(int i);
+        operator const char*() const;
 
         friend bool operator ==(const Fecha& A, const Fecha& B);
         friend bool operator >(const Fecha& A, const Fecha& B);
@@ -33,6 +36,9 @@ class Fecha
         friend bool operator <=(const Fecha& A, const Fecha& B);
         friend bool operator >=(const Fecha& A, const Fecha& B);
         friend bool operator !=(const Fecha& A, const Fecha& B);
+
+        Fecha operator +(int i) const;
+        Fecha operator -(int i) const;
 
         class Invalida 
         {
@@ -46,6 +52,10 @@ class Fecha
 
     private:
         int dia_, mes_, año_;
+
+        mutable char crep[40];
+        
+        mutable bool actual;
 
         static bool descomponerFecha(const char* fechaFormateada, int &dia, int &mes , int &año);
 

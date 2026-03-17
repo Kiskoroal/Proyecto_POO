@@ -16,7 +16,7 @@ class Cadena
         Cadena(const char* cadenaCopia);
 
         //Constructor de copia
-        Cadena(const Cadena& A);
+       Cadena(const Cadena& A);
         
         //Observadoras
         inline size_t length() const { return tam_; }
@@ -51,14 +51,11 @@ class Cadena
         //Operadores sobrecargados []
         inline const char& operator [](size_t indice) const { return s_[indice]; }
         inline char& operator [](size_t indice) { return s_[indice]; }
+        Cadena& operator =(const Cadena& A);
+        explicit inline operator const char*() const { return s_; }
+        Cadena& operator +=(const Cadena& A);
+        Cadena& operator =(const char* a);
 
-        //Operadores lógicos
-        inline friend bool operator ==(const Cadena& A, const Cadena& B) { return strcmp(A.s_, B.s_) == 0; }
-        inline friend bool operator !=(const Cadena& A, const Cadena& B) { return !(A == B); };
-        inline friend bool operator <(const Cadena& A, const Cadena& B)  { return strcmp(A.s_, B.s_) < 0; }
-        inline friend bool operator >(const Cadena& A, const Cadena& B)  { return !(A < B) && (A != B); }
-        inline friend bool operator <=(const Cadena& A, const Cadena& B) { return !(A > B); }
-        inline friend bool operator >=(const Cadena& A, const Cadena& B) { return !(A < B); }
 
         ~Cadena();
     private:
@@ -66,5 +63,14 @@ class Cadena
         size_t tam_;
         char* s_;
 };
+
+bool operator ==(const Cadena& A, const Cadena& B);
+bool operator !=(const Cadena& A, const Cadena& B);
+bool operator <(const Cadena& A, const Cadena& B);
+bool operator >(const Cadena& A, const Cadena& B);
+bool operator <=(const Cadena& A, const Cadena& B); 
+bool operator >=(const Cadena& A, const Cadena& B);
+
+Cadena operator +(const Cadena& A, const Cadena& B);
 
 #endif //__CADENA__HPP

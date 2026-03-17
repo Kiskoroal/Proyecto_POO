@@ -1,14 +1,13 @@
 #include <ctime>
 #include <cstdio> //Para hacer uso de sscanf
 #include <cmath>    //Para hacer uso de log y pow
-#include <utility>  //Para usar std::swap
 #include "./fecha.hpp"
 
 //Metodos privados
 
 bool Fecha::descomponerFecha(const char* fechaFormateada, int &dia, int &mes , int &año) 
 {
-            bool correcto = std::sscanf(fechaFormateada, "%d/%d/%d", &dia, &mes, &año) == 3;
+            bool correcto = sscanf(fechaFormateada, "%d/%d/%d", &dia, &mes, &año) == 3;
             if(correcto && año > 0) 
             {
                 int cifras = log10(año) + 1;
@@ -43,7 +42,7 @@ void Fecha::validarFecha() const
 }
 
 //Funciones públicas
-Fecha::Fecha(int d, int m, int a) : dia_(d), mes_(m), año_(a)
+Fecha::Fecha(int d, int m, int a) : dia_(d), mes_(m), año_(a), actual(false)
 {    
     std::time_t tiempo_actual = std::time(nullptr);
     std::tm* tiempo_desglosado = std::localtime(&tiempo_actual);
@@ -53,11 +52,8 @@ Fecha::Fecha(int d, int m, int a) : dia_(d), mes_(m), año_(a)
     validarFecha();
 }
 
-//Constructor de copia
-Fecha::Fecha(const Fecha& A) : Fecha(A.dia_, A.mes_, A.año_) {}
-
 //Constructor de conversión de cadena de bajo nivel (dd/mm/aa)
-Fecha::Fecha(const char* fecha) 
+Fecha::Fecha(const char* fecha) : actual(false)
 {
     int d, m, a;
 
@@ -73,48 +69,35 @@ Fecha::Fecha(const char* fecha)
     año_ = fechaNueva.año();
 }
 
-//Operador de asignación
-
-Fecha& Fecha::operator =(const Fecha& A) 
-{
-    Fecha copia(A);
-
-    std::swap(dia_, copia.dia_);
-    std::swap(mes_, copia.mes_);
-    std::swap(año_, copia.año_);
-
-    return *this;
-}
-
 bool operator ==(const Fecha& A, const Fecha& B) 
 {
     return (A.dia_ == B.dia_) && (A.mes_ == B.mes_) && (A.año_ == B.año_);
 }
 
-bool operator >(const Fecha& A, const Fecha& B) 
+bool operator <(const Fecha& A, const Fecha& B) 
 {
     if(A.año_ != B.año_) 
     {
-        return A.año_ > B.año_;
+        return A.año_ < B.año_;
     }
     else if(A.mes_ != B.mes_) 
     {
-        return A.mes_ > B.mes_;
+        return A.mes_ < B.mes_;
     }
     else 
     {
-        return A.dia_ > B.dia_;
+        return A.dia_ < B.dia_;
     }
 }
 
-bool operator <(const Fecha& A, const Fecha& B) 
+bool operator >(const Fecha& A, const Fecha& B) 
 {
-    return !(A > B) && !(A == B);
+    return (A != B) && !(A < B);
 }
 
 bool operator <=(const Fecha& A, const Fecha& B) 
 {
-    return !(A > B);
+    return A < B || A == B;
 }
 
 bool operator >=(const Fecha& A, const Fecha& B) 
@@ -125,4 +108,107 @@ bool operator >=(const Fecha& A, const Fecha& B)
 bool operator !=(const Fecha& A, const Fecha& B) 
 {
     return !(A == B);
+}
+
+Fecha Fecha::operator +(int i) const
+{
+    Fecha copia;
+
+    copia = *this;
+
+    copia += i;
+    return copia;
+}
+
+Fecha Fecha::operator -(int i) const
+{
+    Fecha copia;
+
+    copia = *this;
+
+    copia += -i;
+
+    return copia;
+}
+
+Fecha& Fecha::operator +=(int i) 
+{
+    std::tm fechaNormalizada = {};
+
+    fechaNormalizada.tm_mday = dia_ + i;
+    fechaNormalizada.tm_mon = mes_ - 1;
+    fechaNormalizada.tm_year = año_ - 1900;
+
+    std::mktime(&fechaNormalizada);
+
+    dia_ = fechaNormalizada.tm_mday;
+    mes_ = fechaNormalizada.tm_mon + 1;
+    año_ = fechaNormalizada.tm_year + 1900;
+    actual = false;
+
+    validarFecha();
+
+
+    return *this;
+}
+
+Fecha& Fecha::operator -=(int i) 
+{
+    return *this += -i;
+}
+
+Fecha& Fecha::operator ++() 
+{
+
+    return *this += 1;
+}
+
+Fecha Fecha::operator ++(int i) 
+{
+    Fecha copia(*this);
+    *this += 1;
+
+    return copia;
+}
+
+Fecha& Fecha::operator --() 
+{
+    return *this += -1;
+}
+
+Fecha Fecha::operator --(int i) 
+{
+    Fecha copia(*this);
+    *this += -1;
+
+    return copia;
+}
+
+Fecha::operator const char*() const 
+{
+    if(!actual) 
+    {
+
+        std::tm horaThis = {};
+
+        horaThis.tm_mday = dia_;
+        horaThis.tm_mon  = mes_ - 1;
+        horaThis.tm_year = año_ - 1900;
+
+        std::mktime(&horaThis); //Normalizamos para obtener todos los datos de esa fecha
+
+        static const char* dias[] = {
+            "domingo", "lunes", "martes", "miércoles",
+            "jueves", "viernes", "sábado"
+        };
+
+        static const char* meses[] = {
+            "", "enero", "febrero", "marzo", "abril", "mayo", "junio",
+            "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+        };
+
+        std::snprintf(crep, sizeof(crep), "%s %d de %s de %d", dias[horaThis.tm_wday], dia_, meses[mes_], año_);
+    }
+    
+    return crep;
 }
